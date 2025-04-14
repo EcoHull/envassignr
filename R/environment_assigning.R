@@ -5,7 +5,8 @@ date_sequence <- function(dataframe, start, end, sequence_name = "date_sequence"
     dplyr::mutate(
       !!rlang::sym(sequence_name) := list(seq(.data[[start]], .data[[end]], by = "day"))
     ) |>
-    dplyr::ungroup()
+    dplyr::ungroup() |>
+    print()
 }
 
 find_factored_measurements = function(data, environmental_data, date_sequence_column = "date_sequence", environment_date_column, environment_variable_column, variable_column = "variable_values", data_fct_col = NA, env_fct_col = NA, fct_id = NA) {
@@ -19,12 +20,8 @@ find_factored_measurements = function(data, environmental_data, date_sequence_co
           factor_id = "NA"
         }
 
-        print(factor_id)
-
         environmental_data = environmental_data |>
           dplyr::filter(if (!is.na(env_fct_col)) {.data[[env_fct_col]] == factor_id}else {TRUE})
-
-        print(environmental_data)
 
         row_indices <- match(dates, environmental_data[[environment_date_column]])
 
@@ -32,7 +29,8 @@ find_factored_measurements = function(data, environmental_data, date_sequence_co
 
       }))
     ) |>
-    dplyr::ungroup()
+    dplyr::ungroup() |>
+    print()
 }
 
 generate_values = function(dataframe, column_name = "variable_values", prefix = NA, unit = NA) {
@@ -58,7 +56,8 @@ generate_values = function(dataframe, column_name = "variable_values", prefix = 
       !!avg_variable := purrr::map_dbl(.data[[column_name]], ~ mean(as.numeric(.x))),
       !!max_variable := purrr::map_dbl(.data[[column_name]], ~ max(as.numeric(.x))),
       !!min_variable := purrr::map_dbl(.data[[column_name]], ~ min(as.numeric(.x)))
-    )
+    ) |>
+    print()
 }
 
 
